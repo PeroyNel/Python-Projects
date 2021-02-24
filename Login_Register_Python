@@ -1,11 +1,132 @@
 from Tkinter import *
+import os 
+
+def delete2():
+      screen3.destroy()
+
+def delete3():
+      screen4.destroy()
+      
+def delete4():
+      screen5.destroy()
+
+def logout():
+      screen7.destroy()
+
+def delete_note1():     
+      filename3 = raw_filename2.get()
+      os.remove(filename3)
+      screen14 = Toplevel(screen)
+      screen14.title("Info")
+      screen14.geometry("400x400")
+      Label(screen14, text = filename3 + " removed").pack()
+      
+
+def delete_note():
+      screen13 = Toplevel(screen)
+      screen13.title("Info")
+      screen13.geometry("250x250")
+      all_files = os.listdir(os.getcwd())
+      Label(screen13, text = "Please use one of the filesnames below")
+      Label(screen13, text = all_files).pack()
+      global raw_filename2
+      raw_filename2 = StringVar()
+      Entry(screen13, textvariable = raw_filename2).pack()
+      Button(screen13, command = delete_note1, text = "OK").pack()
+      
+
+def saved():
+  screen10 = Toplevel(screen)
+  screen10.title("Saved")
+  screen10.geometry("100x100")
+  Label(screen10, text = "Saved").pack()
+
+
+def save():
+  filename = raw_filename.get()
+  note = raw_note.get()
+
+  data = open(filename, "w")
+  data.write(note)
+  data.close()
+
+  saved()
+
+def create_note():
+  global screen9
+  global raw_filename
+  global raw_note
+  raw_filename = StringVar()
+  raw_note = StringVar()
+  screen9 = Toplevel(screen)
+  screen9.title("Info")
+  screen9.geometry("300x250")
+  Label(screen9, text = "Please enter a filename for the notes below").pack()
+  Entry(screen9, text = raw_filename).pack()
+  Label(screen9, text = "Please enter notes for the file below").pack()
+  Entry(screen9, text = raw_note).pack()
+  Button(screen9, text = "Save", command = save).pack()
+       
+
+
+def view_note1():
+      global filename1
+      filename1 = raw_filename1.get()
+      data = open(filename1, "r")
+      data1 = data.read()
+      screen12 = Toplevel(screen)
+      screen12.title("Info")
+      screen12.geometry("400x400")
+      Label(screen12, text = data1).pack()
+
+def view_note():
+      screen11 = Toplevel(screen)
+      screen11.title("Info")
+      screen11.geometry("250x250")
+      all_files = os.listdir(os.getcwd())
+      Label(screen11, text = "Please use one of the filesnames below")
+      Label(screen11, text = all_files).pack()
+      global raw_filename1
+      raw_filename1 = StringVar()
+      Entry(screen11, textvariable = raw_filename1).pack()
+      Button(screen11, command = view_note1, text = "OK").pack()
+       
+
+def session ():
+      global screen8
+      screen8 = Toplevel(screen)
+      screen8.title("dashboard")
+      screen8.geometry("400x400")
+      Label(screen8, text = "Welcome to Dashboard").pack()
+      Button(screen8, text = "Create Note", command = create_note).pack()
+      Button(screen8, text = "View Note", command = view_note).pack()
+      Button(screen8, text = "Delete Note", command = delete_note).pack()
+
+def login_success():
+  session()
+
+def password_not_recognized():
+      global screen4
+      screen4 = Toplevel(screen)
+      screen4.title("Password Not Recognized")
+      screen4.geometry("150x100")
+      Label(screen4, text = "Password Not Recognized").pack()
+      Button (screen4, text = "Ok", command = delete3).pack()
+
+def user_not_found():
+      global screen5
+      screen5 = Toplevel(screen)
+      screen5.title("User Not Found")
+      screen5.geometry("150x100")
+      Label(screen5, text = "User Not Found").pack()
+      Button (screen5, text = "Ok", command = delete4).pack()
 
 def register_user():
     
   username_info = username.get()
   password_info = password.get()
 
-  file=open(username_info+".txt", "w")
+  file=open(username_info, "w")
   file.write(username_info+"\n")
   file.write(password_info)
   file.close()
@@ -39,9 +160,49 @@ def register():
   Label(screen1, text = "").pack()
   Button(screen1, text = "Register", width = 10, height = 1, command = register_user).pack()
 
-    
+def login_verify():
+      
+  username1 = username_verify.get()
+  password1 = password_verify.get()
+
+  username_entry1.delete(0, END)
+  password_entry1.delete(0, END)
+
+
+  list_of_files = os.listdir(os.getcwd())
+  if username1 in list_of_files:
+    file1 = open(username1, "r")
+    verify = file1.read().splitlines()
+    if password1 in verify:
+        login_success()
+    else:
+        password_not_recognized()
+  else:
+        user_not_found()  
+
 def login():
-  print("Login session started")
+  global screen2
+  screen2 = Toplevel(screen)
+  screen2.title("Login")
+  screen2.geometry("300x250")
+  Label(screen2, text = "Please enter details below to login").pack()
+  global username_verify
+  global password_verify
+  username_verify = StringVar()
+  password_verify = StringVar()
+  global username_entry1
+  global password_entry1
+  Label(screen2, text = "").pack()
+  Label(screen2, text = "").pack()
+  Label(screen2, text = "Username * ").pack()
+  username_entry1 = Entry(screen2, textvariable = username_verify)
+  username_entry1.pack()
+  Label(screen2, text = "").pack()
+  Label(screen2, text = "Password * ").pack()   
+  password_entry1 = Entry(screen2, textvariable = password_verify)
+  password_entry1.pack()
+  Label(screen2, text = "").pack() 
+  Button(screen2, text = "Login", width = 10, height = 1, command = login_verify).pack()
 
 def main_screen():
   global screen
