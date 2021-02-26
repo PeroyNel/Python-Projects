@@ -1,0 +1,78 @@
+from Tkinter import *
+import smtplib
+
+#Functions
+def send():
+    try:
+        username = temp_username.get()
+        password = temp_password.get()
+        destination = temp_destination.get()
+        subject = temp_subject.get()
+        body = temp_body.get()
+        if username == "" or password == "" or destination == "" or subject == "" or body == "":
+            notif.config(text = "Not all fields completed", fg = "red")
+            return
+        else:
+            finalMessage = 'Subject: {}\n\n{}'.format(subject, body)
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(username, password)
+            server.sendmail(username, destination, finalmessage)
+            notif.config(text = "Email Sent", fg = "green")
+    except:
+        notif.config(text = "Error Sending Email", fg = "red")
+def reset():
+    username_entry.delete(0, END)
+    password_entry.delete(0, END)
+    destination_entry.delete(0, END)
+    subject_entry.delete(0, END)
+    body_entry.delete(0, END)
+
+
+#Main Screen
+master = Tk()
+master.title("Custom Python Email App")
+
+#Graphics
+titlelabel = Label(master, text = "Custom Email App", font = ("calibri", 15))
+titlelabel.grid(row=0, sticky=N)
+
+Label(master, text = "Use the form to send an email", font = ("calibri", 11)).grid(row=1, sticky = W, padx = 5)
+
+Label(master, text = "Email", font = ("calibri", 11)).grid(row=2, sticky = W, padx = 5)
+Label(master, text = "Password", font = ("calibri", 11)).grid(row=3, sticky = W, padx = 5)
+Label(master, text = "To", font = ("calibri", 11)).grid(row=4, sticky = W, padx = 5)
+Label(master, text = "Subject", font = ("calibri", 11)).grid(row=5, sticky = W, padx = 5)
+Label(master, text = "Body", font = ("calibri", 11)).grid(row=6, sticky = W, padx = 5)
+
+notif = Label(master, text = "", font = ("calibri", 11))
+notif.grid(row=7, sticky = W, padx = 5)
+
+#Storage
+temp_username = StringVar()
+temp_password = StringVar()
+temp_destination = StringVar()
+temp_subject = StringVar()
+temp_body = StringVar()
+
+#Entries
+username_entry = Entry(master, textvariable = temp_username)
+username_entry.grid(row=2, column=1)
+
+password_entry = Entry(master, show = "*", textvariable = temp_password)
+password_entry.grid(row=3, column=1)
+
+destination_entry = Entry(master, textvariable = temp_destination)
+destination_entry.grid(row=4, column=1)
+
+subject_entry = Entry(master, textvariable = temp_subject)
+subject_entry.grid(row=5, column=1)
+
+body_entry = Entry(master, textvariable = temp_body)
+body_entry.grid(row=6, column=1)
+
+#Button
+Button(master, text = "Send", command = send).grid(row=7, sticky = W, pady = 15, padx = 5)
+Button(master, text = "Reset", command = reset).grid(row=7, sticky = W, pady = 45, padx = 45)
+
+mainloop()
