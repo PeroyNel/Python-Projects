@@ -17,7 +17,7 @@ def send():
             server = smtplib.SMTP("smtp.gmail.com", 587)
             server.starttls()
             server.login(username, password)
-            server.sendmail(username, destination, finalmessage)
+            server.sendmail(username, destination, finalMessage)
             notif.config(text = "Email Sent", fg = "green")
     except:
         notif.config(text = "Error Sending Email", fg = "red")
