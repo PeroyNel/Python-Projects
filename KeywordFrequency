@@ -1,0 +1,15 @@
+search = "How to create a password generator using python"
+words = search.split()
+print(words[4])
+counts = {}
+count = 0
+
+for i in range(0, len(words)):
+    firstword = words[i]
+    for i in range(0,len(words)):
+        secondword = words[i]
+        if firstword == secondword:
+            count = count + 1
+    counts[firstword] = count
+    count = 0
+print(counts)
